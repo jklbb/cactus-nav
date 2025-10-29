@@ -16,7 +16,7 @@ export const carouselSitesData: CarouselSite[] = [
   },
   {
     title: "Astro Cactus",
-    description: "一个基于 Astro 的导航主题。",
+    description: "一个简单的 Astro 主题。用它来创建你的博客或网站。",
     imageUrl: "/social-card.png", // 示例：本地图片 (相对于 public 目录)
     linkUrl: "https://github.com/chrismwilliams/astro-theme-cactus/",
   },
