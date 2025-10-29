@@ -21,44 +21,44 @@ export const navigationData: NavCategory[] = [
         description: "我的所有文章和想法。",
       },
       {
-        title: "关于我",
-        url: "/about/",
-        description: "了解更多关于我的信息。",
+        title: "笔记",
+        url: "/notes/",
+        description: "记录生活中的点滴。",
       },
       {
-        title: "GitHub",
-        url: "https://github.com/your-username",
+        title: "开源项目",
+        url: "https://github.com/jklbb",
         description: "查看我的开源项目。",
       },
     ],
   },
   {
-    title: "开发工具",
+    title: "服务平台",
     links: [
       {
-        title: "Astro",
-        url: "https://astro.build/",
-        description: "构建快速网站的 Web 框架。",
+        title: "GitHub",
+        url: "https://github.com/",
+        description: "全球最大的代码托管平台。",
       },
       {
-        title: "Tailwind CSS",
-        url: "https://tailwindcss.com/",
-        description: "一个功能优先的 CSS 框架。",
+        title: "Cloudflare",
+        url: "https://www.cloudflare.com/",
+        description: "全球领先的 CDN 服务提供商。",
       },
       {
-        title: "VS Code",
-        url: "https://code.visualstudio.com/",
-        description: "我日常使用的代码编辑器。",
+        title: "Vercel",
+        url: "https://vercel.com/",
+        description: "全球领先的云平台。",
       },
     ],
   },
   {
-    title: "设计资源",
+    title: "工具资源",
     links: [
       {
-        title: "Figma",
-        url: "https://figma.com/",
-        description: "协作界面设计工具。",
+        title: "Google Gemini",
+        url: "https://gemini.google.com/",
+        description: "Google 的强大 AI 模型。",
       },
       {
         title: "Unsplash",

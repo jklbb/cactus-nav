@@ -1,28 +1,66 @@
 ---
-import SocialList from "@/components/SocialList.astro";
+// 1. 保留我们需要的原始导入 (移除 SocialList)
 import PageLayout from "@/layouts/Base.astro";
 
-// 2. 导入我们的新导航数据
+// 2. 导入我们的导航数据 (保持不变)
 import { navigationData } from "../data/navigation";
+
+// 3. 导入新的轮播数据
+import { carouselSitesData } from "../data/carouselSites";
+
+// 4. 导入 Swiper 的 CSS (核心和分页/导航模块)
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+
+import { Icon } from "astro-icon/components";
+import ExternalSearch from "@/components/ExternalSearch.astro";
 ---
 
 <PageLayout meta={{ title: "Home" }}>
-  
-  <section>
-    <h1 class="title mb-12">Hello World!</h1>
-    <p class="mb-4">
-      Hi, I’m a theme for Astro, a simple starter that you can use to create your website or blog.
-      If you want to know more about how you can customise me, add more posts, and make it your own,
-      click on the GitHub icon link below and it will take you to my repo.
-    </p>
-    <SocialList />
+
+  <section class="mb-16"> {/* 添加一些底部边距 */}
+    <div class="swiper mySwiper h-64 rounded-lg border border-zinc-200 dark:border-zinc-700 bg-zinc-50 dark:bg-zinc-800 relative group"> {/* 设置高度 */}
+      <div class="swiper-wrapper">
+        {
+          carouselSitesData.map((site) => (
+            <div class="swiper-slide">
+              <a 
+                href={site.linkUrl} 
+                target="_blank" 
+                rel="noopener noreferrer" 
+                class="flex flex-col items-center justify-center h-full p-6 text-center"
+              >
+                {/* 图片 */}
+                <img 
+                  src={site.imageUrl} 
+                  alt={site.title} 
+                  class="h-20 w-auto mb-4 object-contain" {/* 调整图片大小和间距 */}
+                  loading="lazy" 
+                />
+                {/* 标题 */}
+                <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-1">
+                  {site.title}
+                </h3>
+                {/* 描述 */}
+                <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                  {site.description}
+                </p>
+              </a>
+            </div>
+          ))
+        }
+      </div>
+      <div class="swiper-pagination"></div>
+
+      <div class="swiper-button-prev absolute left-2 top-1/2 -translate-y-1/2 text-zinc-600 dark:text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer p-2 rounded-full bg-white/50 dark:bg-black/50 hover:bg-white dark:hover:bg-black"></div>
+      <div class="swiper-button-next absolute right-2 top-1/2 -translate-y-1/2 text-zinc-600 dark:text-zinc-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300 cursor-pointer p-2 rounded-full bg-white/50 dark:bg-black/50 hover:bg-white dark:hover:bg-black"></div>
+    </div>
   </section>
 
-  <section class="mt-16">
-    <h2 class="title text-accent mb-6 text-xl">
-      <a href="/">导航站</a>
-    </h2>
+  <ExternalSearch />
 
+  <section>
     <div class="space-y-12">
       {
         navigationData.map((category) => (
@@ -30,7 +68,6 @@ import { navigationData } from "../data/navigation";
             <h3 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100 md:text-xl">
               {category.title}
             </h3>
-
             <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
               {category.links.map((link) => (
                 <a
@@ -39,10 +76,10 @@ import { navigationData } from "../data/navigation";
                   rel="noopener noreferrer"
                   class:list={[
                     "block rounded-lg p-5",
-                    "border border-zinc-200 dark:border-zinc-700", // 边框
-                    "bg-zinc-50 dark:bg-zinc-800", // 卡片背景色
+                    "border border-zinc-200 dark:border-zinc-700",
+                    "bg-zinc-50 dark:bg-zinc-800",
                     "transition-all duration-300",
-                    "hover:shadow-lg hover:-translate-y-1", // 悬停效果
+                    "hover:shadow-lg hover:-translate-y-1",
                   ]}
                 >
                   <h4 class="font-medium text-zinc-900 dark:text-zinc-100">
@@ -61,3 +98,57 @@ import { navigationData } from "../data/navigation";
   </section>
   
 </PageLayout>
+
+<script>
+  // 从 swiper 导入核心和需要的模块
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay } from 'swiper/modules'; // 导入自动播放模块
+
+  // 初始化 Swiper
+  const swiper = new Swiper('.mySwiper', {
+    // 使用导入的模块
+    modules: [Navigation, Pagination, Autoplay], // 添加 Autoplay
+    
+    // 配置选项
+    loop: true, // 循环播放
+    autoplay: {     // 自动播放配置
+      delay: 3000, // 3秒切换一次
+      disableOnInteraction: false, // 用户操作后不停止自动播放
+    },
+    pagination: {
+      el: '.swiper-pagination', // 分页器元素
+      clickable: true,       // 允许点击小圆点切换
+    },
+    navigation: {
+      nextEl: '.swiper-button-next', // 下一页按钮
+      prevEl: '.swiper-button-prev', // 上一页按钮
+    },
+  });
+</script>
+
+<style is:global>
+  /* 调整 Swiper 导航按钮的大小和颜色 */
+  .swiper-button-next::after,
+  .swiper-button-prev::after {
+    font-size: 1.25rem !important; /* 更小的箭头 */
+    font-weight: bold;
+    color: inherit; /* 继承父元素的颜色 */
+  }
+
+  /* 调整分页器小圆点的颜色 */
+  .swiper-pagination-bullet {
+    background-color: #a1a1aa; /* zinc-400 */
+    opacity: 0.6;
+  }
+  .swiper-pagination-bullet-active {
+    background-color: #18181b; /* zinc-900 */
+    opacity: 1;
+  }
+  /* 暗黑模式下的小圆点 */
+  :global(html.dark) .swiper-pagination-bullet {
+     background-color: #71717a; /* zinc-500 */
+  }
+   :global(html.dark) .swiper-pagination-bullet-active {
+     background-color: #fafafa; /* zinc-50 */
+  }
+</style>

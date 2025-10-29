@@ -1,0 +1,96 @@
+---
+// 1. 导入 Icon 组件 (可选，用于搜索按钮图标)
+import { Icon } from "astro-icon/components";
+
+// 2. 定义搜索引擎列表
+//    - name: 显示在下拉菜单中的名称
+//    - id: 用于 <option> value 的唯一标识符
+//    - url: 搜索引擎的提交 URL
+//    - queryParam: URL 中用于搜索查询的参数名 (通常是 'q')
+//    - placeholder: 输入框的提示文字
+const searchEngines = [
+  { id: 'google', name: "Google", url: "https://www.google.com/search", queryParam: "q", placeholder: "Search Google..." },
+  { id: 'duckduckgo', name: "DuckDuckGo", url: "https://duckduckgo.com/", queryParam: "q", placeholder: "Search DuckDuckGo..." },
+  { id: 'bing', name: "Bing", url: "https://www.bing.com/search", queryParam: "q", placeholder: "Search Bing..." },
+  { id: 'github', name: "GitHub", url: "https://github.com/search", queryParam: "q", placeholder: "Search GitHub..." },
+  { id: 'baidu', name: "Baidu", url: "https://www.baidu.com/s", queryParam: "wd", placeholder: "Search Baidu..." }, // 百度用 'wd'
+  // 在这里添加更多搜索引擎...
+];
+
+// 3. 设置默认搜索引擎 (可以根据需要修改 'google')
+const defaultEngineId = 'google'; 
+const defaultEngine = searchEngines.find(e => e.id === defaultEngineId) || searchEngines[0];
+---
+
+<div class="external-search-container mb-8"> {/* 容器，添加一些底部外边距 */}
+  <form 
+    id="external-search-form" 
+    action={defaultEngine.url} 
+    method="GET" 
+    target="_blank"  {/* 在新标签页打开搜索结果 */}
+    role="search" 
+    class="flex items-center gap-0 p-1 border border-zinc-300 dark:border-zinc-600 rounded-lg bg-white dark:bg-zinc-800 focus-within:ring-2 focus-within:ring-blue-500 dark:focus-within:ring-blue-400 shadow-sm"
+  >
+    {/* 搜索引擎选择下拉菜单 */}
+    <select 
+      id="search-engine-select" 
+      aria-label="Select search engine"
+      class="bg-transparent border-0 focus:ring-0 text-sm text-zinc-600 dark:text-zinc-400 pl-2 pr-1 py-2 outline-none appearance-none cursor-pointer hover:text-zinc-800 dark:hover:text-zinc-200 rounded-l-md" 
+    >
+      {searchEngines.map(engine => (
+        <option value={engine.id} selected={engine.id === defaultEngineId}>{engine.name}</option>
+      ))}
+    </select>
+
+    {/* 分隔线 */}
+    <div class="border-l border-zinc-300 dark:border-zinc-600 h-6 mx-1"></div> 
+
+    {/* 搜索输入框 */}
+    <input 
+      type="search" 
+      id="external-search-input"
+      name={defaultEngine.queryParam} 
+      placeholder={defaultEngine.placeholder} 
+      aria-label="Search query"
+      required
+      class="flex-grow bg-transparent border-0 focus:ring-0 px-2 py-2 text-zinc-900 dark:text-zinc-100 placeholder-zinc-400 dark:placeholder-zinc-500 outline-none text-sm" 
+    />
+
+    {/* 提交按钮 */}
+    <button 
+      type="submit" 
+      class="p-2 text-zinc-500 dark:text-zinc-400 hover:text-blue-600 dark:hover:text-blue-400 focus:outline-none focus:ring-1 focus:ring-blue-500 dark:focus:ring-blue-400 rounded-md mr-1" 
+      aria-label="Submit Search"
+    >
+      {/* 使用 astro-icon 显示搜索图标 */}
+      <Icon name="mdi:magnify" class="h-5 w-5" /> 
+    </button>
+  </form>
+</div>
+
+<script define:vars={{ searchEngines }}>
+  const form = document.getElementById('external-search-form');
+  const select = document.getElementById('search-engine-select');
+  const input = document.getElementById('external-search-input');
+
+  // 更新表单 action, input name 和 placeholder
+  function updateFormTarget() {
+    const selectedEngineId = select.value;
+    const selectedEngine = searchEngines.find(e => e.id === selectedEngineId);
+    
+    if (selectedEngine && form && input) {
+      form.action = selectedEngine.url;        // 更新提交 URL
+      input.name = selectedEngine.queryParam; // 更新查询参数名
+      input.placeholder = selectedEngine.placeholder; // 更新提示文字
+      input.setAttribute('aria-label', `Search query for ${selectedEngine.name}`); // 更新 aria-label
+      // 可选：让输入框获得焦点
+      // input.focus(); 
+    }
+  }
+
+  // 监听下拉菜单的 'change' 事件
+  select.addEventListener('change', updateFormTarget);
+
+  // 可选：页面加载时如果 select 的值不是默认值 (例如浏览器记住了选择)，则更新一次
+  // updateFormTarget(); // 通常不需要，因为 HTML 已经设置了默认值
+</script>
