@@ -1,50 +1,63 @@
 ---
-import Base from "@layouts/Base.astro";
-import { SITE } from "@config";
+import SocialList from "@/components/SocialList.astro";
+import PageLayout from "@/layouts/Base.astro";
 
+// 2. 导入我们的新导航数据
 import { navigationData } from "../data/navigation";
 ---
 
-<Base title={SITE.TITLE} description={SITE.DESCRIPTION}>
+<PageLayout meta={{ title: "Home" }}>
+  
+  <section>
+    <h1 class="title mb-12">Hello World!</h1>
+    <p class="mb-4">
+      Hi, I’m a theme for Astro, a simple starter that you can use to create your website or blog.
+      If you want to know more about how you can customise me, add more posts, and make it your own,
+      click on the GitHub icon link below and it will take you to my repo.
+    </p>
+    <SocialList />
+  </section>
 
-  <h1 class="mb-8 text-3xl font-bold text-zinc-900 dark:text-zinc-100">
-    导航站
-  </h1>
+  <section class="mt-16">
+    <h2 class="title text-accent mb-6 text-xl">
+      <a href="/">导航站</a>
+    </h2>
 
-  <div class="space-y-12">
-    {
-      navigationData.map((category) => (
-        <section>
-          <h2 class="mb-4 text-2xl font-semibold text-zinc-900 dark:text-zinc-100">
-            {category.title}
-          </h2>
+    <div class="space-y-12">
+      {
+        navigationData.map((category) => (
+          <section>
+            <h3 class="mb-4 text-lg font-semibold text-zinc-900 dark:text-zinc-100 md:text-xl">
+              {category.title}
+            </h3>
 
-          <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
-            {category.links.map((link) => (
-              <a
-                href={link.url}
-                target={link.url.startsWith("/") ? "_self" : "_blank"}
-                rel="noopener noreferrer"
-                class:list={[
-                  "block rounded-lg p-5",
-                  "border border-zinc-200 dark:border-zinc-700", // 边框
-                  "bg-zinc-50 dark:bg-zinc-800", // 卡片背景色
-                  "transition-all duration-300",
-                  "hover:shadow-lg hover:-translate-y-1", // 悬停效果
-                ]}
-              >
-                <h3 class="text-lg font-medium text-zinc-900 dark:text-zinc-100">
-                  {link.title}
-                </h3>
-                <p class="text-sm text-zinc-600 dark:text-zinc-400">
-                  {link.description}
-                </p>
-              </a>
-            ))}
-          </div>
-        </section>
-      ))
-    }
-  </div>
-
-</Base>
+            <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+              {category.links.map((link) => (
+                <a
+                  href={link.url}
+                  target={link.url.startsWith("/") ? "_self" : "_blank"}
+                  rel="noopener noreferrer"
+                  class:list={[
+                    "block rounded-lg p-5",
+                    "border border-zinc-200 dark:border-zinc-700", // 边框
+                    "bg-zinc-50 dark:bg-zinc-800", // 卡片背景色
+                    "transition-all duration-300",
+                    "hover:shadow-lg hover:-translate-y-1", // 悬停效果
+                  ]}
+                >
+                  <h4 class="font-medium text-zinc-900 dark:text-zinc-100">
+                    {link.title}
+                  </h4>
+                  <p class="text-sm text-zinc-600 dark:text-zinc-400">
+                    {link.description}
+                  </p>
+                </a>
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </div>
+  </section>
+  
+</PageLayout>
